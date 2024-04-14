@@ -5,7 +5,7 @@ import {useMutation} from '@tanstack/react-query';
 import {isAxiosError} from 'axios';
 import React, {useCallback, useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {Button, Text, TextInput} from 'react-native-paper';
+import {Button, Divider, Text, TextInput} from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 
 export default function ShareLocker(
@@ -58,7 +58,12 @@ export default function ShareLocker(
 
   const getSharedUserList = useCallback(() => {
     return selectedLocker.sharedWith.map(e => {
-      return <Text>{e.username}</Text>;
+      return (
+        <>
+          <Text>{e.username}</Text>
+          <Divider />
+        </>
+      )
     });
   }, [selectedLocker]);
 
@@ -80,7 +85,7 @@ export default function ShareLocker(
           <Text variant="titleLarge" style={{fontWeight: 'bold'}}>
             공유자 추가
           </Text>
-          <Text variant="titleSmall">보관함을 함께 공유할 수 있습니다.</Text>
+          <Text variant="titleSmall">{selectedLocker.building} {selectedLocker.floorNumber}층 {selectedLocker.lockerNumber}번 보관함을 함께 공유할 수 있습니다.</Text>
         </View>
         <View
           style={{
@@ -97,7 +102,16 @@ export default function ShareLocker(
             등록
           </Button>
         </View>
-        <View>{getSharedUserList()}</View>
+
+        <Text variant="titleLarge" style={{fontWeight: 'bold'}}>
+            공유자 목록
+        </Text>
+        <Text variant="titleSmall">{selectedLocker.building} {selectedLocker.floorNumber}층 {selectedLocker.lockerNumber}번 보관함의 공유 현황입니다.</Text>
+        <View style={{
+          gap: 14
+        }}>
+          {getSharedUserList()}
+        </View>
       </View>
     </ScrollView>
   );
