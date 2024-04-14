@@ -26,9 +26,6 @@ export default function Home(props: RootStackScreenProps<'Home'>): JSX.Element {
   const {data: userLockerData, refetch: userLockerRefetch} = useQuery(
     ['userLocker'],
     () => userAPI().locker(),
-    {
-      cacheTime: 0,
-    },
   );
 
   // 유저가 공유받은 보관함.
