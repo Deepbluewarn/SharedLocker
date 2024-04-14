@@ -1,73 +1,54 @@
-import {RootStackScreenProps} from '@/navigation/types';
+import { RootStackScreenProps } from '@/navigation/types';
 import authAPI from '@/network/auth/api';
-import {useMutation} from '@tanstack/react-query';
-// import { handleNetworkError } from '@/utils/axios';
-import React, {useCallback, useEffect, useState} from 'react';
-import {ScrollView, View} from 'react-native';
-import {Button, Checkbox, Text, TextInput} from 'react-native-paper';
-import Toast from 'react-native-toast-message';
+import { mutationErrorHandler, mutationSuccessHandler } from '@/utils/mutationHandler';
+import { useMutation } from '@tanstack/react-query';
+import React from 'react';
+import { Controller, SubmitHandler, useForm, useWatch } from 'react-hook-form';
+import { ScrollView, View } from 'react-native';
+import { Button, Checkbox, HelperText, Text, TextInput } from 'react-native-paper';
 
+interface IFormInput {
+  id: string;
+  password: string;
+  passwordCheck: string;
+  name: string;
+  checkTerms: boolean;
+}
 export default function Register(
   props: RootStackScreenProps<'Register'>,
 ): JSX.Element {
-  const [checked, setChecked] = useState(false);
-  const [name, setName] = useState('');
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordCheck, setPasswordCheck] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isDirty, isValid },
+  } = useForm<IFormInput>({
+    defaultValues: {
+      id: '',
+      password: '',
+      passwordCheck: '',
+      name: '',
+      checkTerms: false,
+    },
+    mode: 'onChange',
+  });
+  const id = useWatch({ control, name: 'id' });
+  const password = useWatch({ control, name: 'password' });
+  const name = useWatch({ control, name: 'name' });
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    mutation.mutate();
+  }
 
   const mutation = useMutation({
     mutationFn: () => {
       return authAPI().signUp(id, password, name);
     },
-    onSuccess: data => {
-      const _data = data.data;
-
-      if (_data.success) {
-        Toast.show({
-          type: 'success',
-          text2: _data?.message,
-        });
-        props.navigation.navigate('Main');
-      }
+    onSuccess: data => () => {
+      mutationSuccessHandler(data)
+      props.navigation.navigate('Main');
     },
+    onError: error => mutationErrorHandler
   });
-
-  const beforeMutation = useCallback(() => {
-    if (!checked) {
-      Toast.show({
-        type: 'error',
-        text2: '이용약관에 동의해주세요.',
-      });
-      return false;
-    }
-
-    if(!name || !id) {
-      Toast.show({
-        type: 'error',
-        text2: '이름과 아이디를 입력해주세요.',
-      });
-      return false;
-    }
-
-    if (!password) {
-      Toast.show({
-        type: 'error',
-        text2: '비밀번호를 입력해주세요.',
-      });
-      return false;
-    }
-
-    if (password !== passwordCheck) {
-      Toast.show({
-        type: 'error',
-        text2: '비밀번호가 일치하지 않습니다.',
-      });
-      return false;
-    }
-
-    return true;
-  }, [name, id, password, passwordCheck, checked]);
 
   return (
     <ScrollView
@@ -84,7 +65,7 @@ export default function Register(
             marginBottom: 16,
             gap: 8,
           }}>
-          <Text variant="titleLarge" style={{fontWeight: 'bold'}}>
+          <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
             새로운 계정 생성
           </Text>
           <View style={{
@@ -92,7 +73,7 @@ export default function Register(
             alignItems: 'center',
           }}>
             <Text variant="titleSmall">이미 계정이 있으신가요?</Text>
-            <Button 
+            <Button
               onPress={() => {
                 props.navigation.navigate('Login')
               }}
@@ -100,31 +81,74 @@ export default function Register(
               로그인
             </Button>
           </View>
-          
+
         </View>
         <View
           style={{
-            gap: 14,
+            gap: 10,
           }}>
-          <TextInput
-            placeholder="이름"
-            onChangeText={newText => setName(newText)}
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                label={'이름'}
+                placeholder="이름"
+                value={value}
+                onChangeText={onChange}
+              />
+            )}
+            name="name"
+            rules={{ required: '이름을 입력하세요.' }}
           />
-          <TextInput
-            placeholder="아이디"
-            onChangeText={newText => setId(newText)}
+          {errors.name && <HelperText type='error'>{errors.name.message}</HelperText>}
+
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                label={'아이디'}
+                placeholder="아이디"
+                value={value}
+                onChangeText={onChange}
+              />
+            )}
+            name="id"
+            rules={{ required: '아이디를 입력하세요.' }}
           />
-          <TextInput
-            placeholder="비밀번호"
-            secureTextEntry={true}
-            onChangeText={newText => setPassword(newText)}
+          {errors.id && <HelperText type='error'>{errors.id.message}</HelperText>}
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                label={'비밀번호'}
+                placeholder="비밀번호"
+                secureTextEntry={true}
+                value={value}
+                onChangeText={onChange}
+              />
+            )}
+            name="password"
+            rules={{ required: '비밀번호를 입력하세요.' }}
           />
-          <TextInput
-            placeholder="비밀번호 재입력"
-            secureTextEntry={true}
-            error={password !== passwordCheck}
-            onChangeText={newText => setPasswordCheck(newText)}
+          {errors.password && <HelperText type='error'>{errors.password.message}</HelperText>}
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                label={'비밀번호 재입력'}
+                placeholder="비밀번호 재입력"
+                secureTextEntry={true}
+                value={value}
+                onChangeText={onChange}
+              />
+            )}
+            name="passwordCheck"
+            rules={{
+              required: '비밀번호를 한번 더 입력하세요.',
+              validate: (value) => value === password || '비밀번호가 일치하지 않습니다.'
+            }}
           />
+          {errors.passwordCheck && <HelperText type='error'>{errors.passwordCheck.message}</HelperText>}
         </View>
 
         <View
@@ -132,11 +156,16 @@ export default function Register(
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <Checkbox
-            status={checked ? 'checked' : 'unchecked'}
-            onPress={() => {
-              setChecked(!checked);
-            }}
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Checkbox
+                status={value ? 'checked' : 'unchecked'}
+                onPress={() => onChange(!value)}
+              />
+            )}
+            name="checkTerms"
+            rules={{ required: '이용약관에 동의해주세요.' }}
           />
           <Text>이용약관에 동의합니다.</Text>
         </View>
@@ -144,9 +173,8 @@ export default function Register(
         <View>
           <Button
             mode="contained-tonal"
-            onPress={() => {
-              if (beforeMutation()) mutation.mutate();
-            }}>
+            disabled={!isValid || !isDirty}
+            onPress={handleSubmit(onSubmit)}>
             회원가입
           </Button>
         </View>
