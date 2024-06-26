@@ -17,7 +17,7 @@ export default function Welcome(props: WelcomeStackScreenProps<'Welcome'>): JSX.
   });
   
   const kakaoLoginBtn = async () => {
-    const url = `${process.env.API_BASE_URL}/auth/callback/native/kakao`
+    const url = `${process.env.API_BASE_URL}/auth/native/kakao`
     try {
       if (await InAppBrowser.isAvailable()) {
         InAppBrowser.openAuth(url, 'sharedlocker://', {
@@ -80,7 +80,7 @@ export default function Welcome(props: WelcomeStackScreenProps<'Welcome'>): JSX.
           회원가입
         </Button>
 
-        <Button
+        {/* <Button
           mode="elevated"
           onPress={() => {
             removeAllSecureToken().then(() => {
@@ -88,7 +88,7 @@ export default function Welcome(props: WelcomeStackScreenProps<'Welcome'>): JSX.
             });
           }}>
           removeAllSecureToken
-        </Button>
+        </Button> */}
       </View>
     </View>
   );
