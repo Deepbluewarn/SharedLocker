@@ -40,6 +40,31 @@ export default function Welcome(props: WelcomeStackScreenProps<'Welcome'>): JSX.
       Linking.openURL(url)
     }
   }
+
+  const googleLoginBtn = async () => {
+    const url = `${process.env.API_BASE_URL}/auth/native/google`
+    try {
+      if (await InAppBrowser.isAvailable()) {
+        InAppBrowser.openAuth(url, 'sharedlocker://', {
+          // iOS Properties
+          ephemeralWebSession: false,
+          // Android Properties
+          showTitle: false,
+          enableUrlBarHiding: true,
+          enableDefaultShare: false
+        }).then((response) => {
+          if (
+            response.type === 'success' &&
+            response.url
+          ) {
+            Linking.openURL(response.url)
+          }
+        })
+      } else Linking.openURL(url)
+    } catch (error) {
+      Linking.openURL(url)
+    }
+  }
   
   return (
     <View
@@ -64,6 +89,9 @@ export default function Welcome(props: WelcomeStackScreenProps<'Welcome'>): JSX.
         }}>
           <Button mode="contained-tonal" onPress={kakaoLoginBtn}>
             카카오 로그인
+          </Button>
+          <Button mode="contained-tonal" onPress={googleLoginBtn}>
+            구글 로그인
           </Button>
         <Button
           mode="contained-tonal"
