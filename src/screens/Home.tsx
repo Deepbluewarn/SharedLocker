@@ -73,6 +73,7 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
     floorNumber: number,
     lockerNumber: number,
     isOwner: boolean,
+    assigneeTo: string
   }
 
   const cancelLockerMutation = 
@@ -82,12 +83,14 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
       floorNumber: number,
       lockerNumber: number,
       isOwner: boolean,
+      assigneeTo: string,
     }) => {
       return lockerAPI().cancelLocker(
         data.buildingNumber,
         data.floorNumber,
         data.lockerNumber,
         data.isOwner,
+        data.assigneeTo
       );
     },
     onSuccess: (data) => {
@@ -215,6 +218,7 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
               floorNumber: selectedLocker.floorNumber,
               lockerNumber: selectedLocker.lockerNumber,
               isOwner: selectedLocker.owned,
+              assigneeTo: selectedLocker.sharedWithUsers[0].userId
             });
           },
         },

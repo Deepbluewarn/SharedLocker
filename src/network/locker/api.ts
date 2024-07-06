@@ -55,12 +55,14 @@ const lockerAPI = () => ({
     floorNumber: number,
     lockerNumber: number,
     isOwner: boolean,
+    assigneeTo: string,
   ): Promise<ILockerCancel> => {
     return axiosInstance.post('/api/locker/cancel', {
       buildingNumber,
       floorNumber,
       lockerNumber,
-      isOwner
+      isOwner,
+      assigneeTo,
     });
   }
 });
