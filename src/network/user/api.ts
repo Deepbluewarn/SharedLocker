@@ -1,5 +1,5 @@
 import {axiosInstance} from '../client';
-import { IUser, IUsersLocker, IUsersSharedLocker } from '@/types/api/user';
+import { IUser, IUserNicknameUpdate, IUsersLocker, IUsersSharedLocker } from '@/types/api/user';
 
 const userAPI = () => ({
   user: (): Promise<IUser> => {
@@ -11,6 +11,9 @@ const userAPI = () => ({
   sharedLocker: (): Promise<IUsersSharedLocker> => {
     return axiosInstance.get('/api/user/sharedLocker');
   },
+  updateNickname: (nickname: string): Promise<IUserNicknameUpdate> => {
+    return axiosInstance.post('/api/user/nickname', { nickname });
+  }
 });
 
 export default userAPI;

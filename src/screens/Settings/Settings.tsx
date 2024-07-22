@@ -8,6 +8,7 @@ import { Alert } from "react-native";
 import { Appbar, Button, Text } from "react-native-paper";
 import { Profile } from "./Profile";
 import LockerManagement from "./LockerManagement";
+import UpdateNickname from "./UpdateNickname";
 
 export default function Settings(props: SettingStackScreenProps<'Settings'>) {
   const { refetch } = useQuery<ILogout>(['auth'], () => authAPI().signOut(), {
@@ -63,6 +64,7 @@ export function SettingStack(): JSX.Element {
       <Stack.Screen name='Settings' component={Settings} options={{headerShown: false}}/>
       <Stack.Screen name='Profile' component={Profile} options={{headerShown: false}} />
       <Stack.Screen name='LockerManagement' component={LockerManagement} options={{headerShown: false}} />
+      <Stack.Screen name='UpdateNickname' component={UpdateNickname} options={{headerShown: false}} />
     </Stack.Navigator>
   )
 }
