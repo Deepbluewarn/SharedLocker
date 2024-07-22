@@ -218,7 +218,7 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
               floorNumber: selectedLocker.floorNumber,
               lockerNumber: selectedLocker.lockerNumber,
               isOwner: selectedLocker.owned,
-              assigneeTo: selectedLocker.sharedWithUsers[0].userId
+              assigneeTo: selectedLocker.sharedWithUsers[0]?.userId
             });
           },
         },
