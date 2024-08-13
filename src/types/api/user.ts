@@ -16,3 +16,4 @@ export interface User {
 export interface IUser extends IServerInfoResponse<User> {}
 export interface IUsersLocker extends IServerInfoResponse<string, ILockerWithUserInfo[]> {}
 export interface IUsersSharedLocker extends IServerInfoResponse<string, ILockerWithUserInfo[]> {}
+export interface IUserNicknameUpdate extends IServerInfoResponse<string> {}

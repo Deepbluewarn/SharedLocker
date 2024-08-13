@@ -9,7 +9,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Alert, ScrollView, View } from 'react-native';
-import { Appbar, Button, Card, Divider, Menu, Text } from 'react-native-paper';
+import { Appbar, Button, Card, Dialog, Divider, Menu, Portal, RadioButton, Text } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
 import Toast from 'react-native-toast-message';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -23,6 +23,7 @@ import { IUser, IUsersLocker, IUsersSharedLocker } from '@/types/api/user';
 import { ILogout, IQrKey } from '@/types/api/auth';
 import RequestList from '@/components/RequestList';
 import Admin from './Admin';
+import { HomeStyles } from '@/styles/home';
 
 export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
   // 유저가 이용할 수 있는 보관함의 전체 목록입니다. 소유 보관함과 공유 보관함을 모두 포함합니다.
@@ -35,6 +36,7 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
   const [selLockerDesc, setSelLockerDesc] = useState<string>('');
   const [dropdownPlaceholder, setDropdownPlaceholder] = 
     useState<string>(userLocker.size > 0 ? '보관함 선택' : '보관함이 없습니다.');
+  const [selectedAssignee, setSelectedAssignee] = useState('');
   const params = props.route.params;
   const {
     status: authStatus,
@@ -198,6 +200,14 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
     return `${qrKeyData.data.value.key} ${lockerInfo}`;
   }, [selectedLocker, qrKeyData]);
 
+  /**
+   * Dialog
+   */
+
+  const [dialogVisible, setDialogVisible] = React.useState(false);
+  const showDialog = () => setDialogVisible(true);
+  const hideDialog = () => setDialogVisible(false);
+
   const cancelLocker = useCallback(() => {
     if (!selectedLocker) return;
 
@@ -213,13 +223,7 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
         {
           text: '확인',
           onPress: () => {
-            cancelLockerMutation.mutate({
-              buildingNumber: selectedLocker.buildingNumber,
-              floorNumber: selectedLocker.floorNumber,
-              lockerNumber: selectedLocker.lockerNumber,
-              isOwner: selectedLocker.owned,
-              assigneeTo: selectedLocker.sharedWithUsers[0].userId
-            });
+            showDialog()
           },
         },
       ],
@@ -337,6 +341,50 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
 
         </View>
       </ScrollView>
+
+      <Portal>
+        <Dialog visible={dialogVisible} onDismiss={hideDialog}>
+          <Dialog.Title>보관함 양도</Dialog.Title>
+          <Dialog.Content>
+            <Text variant="bodyMedium">양도하고자 하는 회원을 선택하세요.</Text>
+
+            <View style={[HomeStyles.AssigneeDialogContainer]}>
+              {
+                selectedLocker?.sharedWithUsers.map(user => {
+                  return <>
+                    <View key={user.userId} style={[HomeStyles.AssigneeList]}>
+                      <Text onPress={() => setSelectedAssignee(user.userId)}>
+                        {`${user.nickname} (${user.userId})`}
+                      </Text>
+                      <RadioButton
+                        
+                        value={user.userId}
+                        status={selectedAssignee == user.userId ? 'checked' : 'unchecked'}
+                        onPress={() => setSelectedAssignee(user.userId)}
+                      />
+                    </View>
+                  </>
+                })
+              }
+            </View>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => {
+              hideDialog()
+
+              if (!selectedLocker) return;
+
+              cancelLockerMutation.mutate({
+                buildingNumber: selectedLocker.buildingNumber,
+                floorNumber: selectedLocker.floorNumber,
+                lockerNumber: selectedLocker.lockerNumber,
+                isOwner: selectedLocker.owned,
+                assigneeTo: selectedAssignee
+              });
+            }}>완료</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </>
   );
 }

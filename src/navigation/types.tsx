@@ -36,6 +36,7 @@ export type SettingStackParamList = {
   Settings: undefined;
   Profile: undefined;
   LockerManagement: undefined;
+  UpdateNickname: undefined;
 }
 
 export type WelcomeStackScreenProps<T extends keyof WelcomeStackParamList> =

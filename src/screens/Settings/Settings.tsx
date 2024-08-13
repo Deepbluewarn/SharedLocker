@@ -10,6 +10,7 @@ import { Profile } from "./Profile";
 import LockerManagement from "./LockerManagement";
 import Toast from "react-native-toast-message";
 import { IServerErrorResponse } from "@/types/api";
+import UpdateNickname from "./UpdateNickname";
 
 export default function Settings(props: SettingStackScreenProps<'Settings'>) {
   const queryClient = useQueryClient();
@@ -127,6 +128,7 @@ export function SettingStack(): JSX.Element {
       <Stack.Screen name='Settings' component={Settings} options={{headerShown: false}}/>
       <Stack.Screen name='Profile' component={Profile} options={{headerShown: false}} />
       <Stack.Screen name='LockerManagement' component={LockerManagement} options={{headerShown: false}} />
+      <Stack.Screen name='UpdateNickname' component={UpdateNickname} options={{headerShown: false}} />
     </Stack.Navigator>
   )
 }
