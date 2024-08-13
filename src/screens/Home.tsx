@@ -350,7 +350,7 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
 
             <View style={[HomeStyles.AssigneeDialogContainer]}>
               {
-                selectedLocker?.sharedWithUsers.map(user => {
+                selectedLocker?.sharedWithUsers?.map(user => {
                   return <>
                     <View key={user.userId} style={[HomeStyles.AssigneeList]}>
                       <Text onPress={() => setSelectedAssignee(user.userId)}>
