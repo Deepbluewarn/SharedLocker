@@ -19,6 +19,8 @@ export interface QRKeyPost {
  */
 // GET /auth/register/
 export interface IRegister extends IServerInfoResponse<string> {}
+// DELETE /auth/delete/
+export interface IDelete extends IServerInfoResponse<string> {}
 // POST /auth/login/
 export interface ILogin extends IServerInfoResponse<string, TokenResponse> {}
 // POST /auth/logout/

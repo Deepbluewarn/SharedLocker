@@ -7,7 +7,7 @@ import Welcome from './screens/Welcome';
 import Login from './screens/Login';
 import Register from './screens/Register';
 import authAPI from '@/network/auth/api';
-import {getSecureToken, setSecureTokens} from '@/utils/keychain';
+import {getSecureToken, removeAllSecureToken, setSecureTokens} from '@/utils/keychain';
 import HomeMenu from './screens/Settings/HomeMenu';
 import { NavigationContainer } from '@react-navigation/native';
 import { IToken } from './types/api/auth';
@@ -66,6 +66,11 @@ export default function Intro(): JSX.Element {
   }, []);
 
   useEffect(() => {
+    if (authData === null) {
+      // 인증 데이터가 의도적으로 invalidate 되었을 때, 로그아웃 처리
+      removeAllSecureToken()
+      setIsLoggedIn(false);
+    }
     if (isError) {
       Toast.show({
         type: 'error',

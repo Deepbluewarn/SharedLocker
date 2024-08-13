@@ -1,4 +1,4 @@
-import { ILogin, ILogout, IQrKey, IRegister, IToken } from '@/types/api/auth';
+import { IDelete, ILogin, ILogout, IQrKey, IRegister, IToken } from '@/types/api/auth';
 import {axiosInstance} from '../client';
 import {getSecureToken} from '@/utils/keychain';
 
@@ -20,6 +20,9 @@ const authAPI = () => ({
       nickname,
       email,
     });
+  },
+  deleteAccount: (): Promise<IDelete> => {
+    return axiosInstance.delete('/auth/delete', {});
   },
   refreshToken: async (): Promise<IToken> => {
     const token = await getSecureToken('refreshToken');
