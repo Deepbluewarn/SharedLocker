@@ -13,6 +13,7 @@ export const ProfileStyles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 14,
+        flex: 1,
     },
     username: {
         display: 'flex',

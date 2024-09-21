@@ -10,11 +10,12 @@ export default function Step(props: {
   return (
     <ScrollView
       style={{
-        padding: 16,
+        
       }}>
       <View
         style={{
           gap: 16,
+          padding: 16,
         }}>
         <View
           style={{

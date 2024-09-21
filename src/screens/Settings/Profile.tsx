@@ -35,8 +35,9 @@ export function Profile(props: SettingStackScreenProps<'Profile'>): JSX.Element 
 
           <View>
             <View style={[ProfileStyles.username]}>
-              <Text style={[ProfileStyles.nickname]}>{userDataValue.nickname}</Text>
-              <Text style={[ProfileStyles.userId]}>({userDataValue.userId})</Text>
+              <Text numberOfLines={10} style={[ProfileStyles.nickname]}>
+                {`${userDataValue.nickname} (${userDataValue.userId})`}
+              </Text>
             </View>
             <View style={[ProfileStyles.email]}>
               <Text>{userDataValue.email}</Text>

@@ -41,7 +41,7 @@ export default function MainCategory({
       title="건물을 선택하세요"
       subTitle="신청하고자 하는 보관함의 건물 위치를 선택하세요">
       <Surface
-        elevation={5}
+        elevation={0}
         style={{
           gap: 18,
         }}>
