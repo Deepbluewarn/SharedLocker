@@ -10,7 +10,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Alert, ScrollView, View } from 'react-native';
 import { Appbar, Button, Card, Dialog, Divider, Menu, Portal, RadioButton, Text } from 'react-native-paper';
-import QRCode from 'react-native-qrcode-svg';
+import { QrCodeSvg } from 'react-native-qr-svg';
 import Toast from 'react-native-toast-message';
 import { Dropdown } from 'react-native-element-dropdown';
 import { DropdownStyles } from '@/styles/dropdown';
@@ -291,9 +291,10 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
                 }}>
                 {
                   generateQRCode() ? (
-                    <QRCode
-                      value={generateQRCode()}
-                      logoBackgroundColor="transparent"
+                    <QrCodeSvg
+                      value={generateQRCode()!}
+                      frameSize={200}
+                      backgroundColor='#00000000'
                     />
                   ) : null
                 }

@@ -8,7 +8,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { Card, Text } from "react-native-paper";
-import QRCode from "react-native-qrcode-svg";
+import { QrCodeSvg } from "react-native-qr-svg";
 
 interface DropdownItem {
     label: any;
@@ -139,9 +139,11 @@ export default function Admin(): JSX.Element {
                                 }}>
                                 {
                                     generateQRCode() ? (
-                                        <QRCode
-                                            value={generateQRCode()}
-                                            logoBackgroundColor="transparent"
+                                        <QrCodeSvg
+                                            value={generateQRCode()!}
+                                            frameSize={200}
+                                            backgroundColor='#00000000'
+                                            contentCells={5}
                                         />
                                     ) : <Text>보관함을 선택하세요.</Text>
                                 }
