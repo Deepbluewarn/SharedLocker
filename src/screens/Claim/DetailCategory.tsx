@@ -1,6 +1,6 @@
 import {useCallback, useRef} from 'react';
 import Step from '@/components/Step';
-import {Button, Chip, Text} from 'react-native-paper';
+import {Button, Chip, Divider, Surface, Text} from 'react-native-paper';
 import {ClaimStackScreenProps} from '@/navigation/types';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import lockerAPI from '@/network/locker/api';
@@ -131,27 +131,63 @@ export default function DetailCategory({
       const statusAttr = LockerStatusAttrMapper(e.status);
 
       return (
-        <View 
+        <Surface
+          elevation={1}
           key={e.lockerNumber}
           style={{
+            display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: 10,
-        }}>
-          <Button
-            key={e.lockerNumber}
-            mode="contained"
-            onPress={() => onLockerButtonPressed(e.lockerNumber, statusAttr)}
-            buttonColor={statusAttr.color}
-            disabled={statusAttr.disabled}
-            style={{ flex: 1 }}
-          >
-              {`${e.lockerNumber}번`}
-          </Button>
-          <Chip icon='information' mode='outlined'>{statusAttr.statusText}</Chip>
-        </View>
-        
+            padding: 10,
+            borderRadius: 8,
+          }}
+        >
+          <View style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
+            <View style={{
+              width: 4,
+              backgroundColor: statusAttr.color,
+            }}></View>
+
+            <View style={{ display: 'flex', flexDirection: 'column', gap: 16, flex: 1 }}>
+              <View style={{ display: 'flex', flexDirection: 'row', gap: 8, flex: 1 }}>
+                <Button
+                  key={e.lockerNumber}
+                  mode="outlined"
+                  onPress={() => onLockerButtonPressed(e.lockerNumber, statusAttr)}
+                  disabled={statusAttr.disabled}
+                  style={{ flex: 1 }}
+                >
+                  {`${e.lockerNumber}번`}
+                </Button>
+                <Chip
+                  icon='information'
+                  mode='outlined'
+                >
+                  {statusAttr.statusText}
+                </Chip>
+              </View>
+
+              {
+                e.items && e.items.length > 0 ? (
+                  <>
+                    <Divider />
+
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
+                      {e.items.map(e => <Chip key={e}>{e}</Chip>)}
+                    </View>
+                  </>
+                ) : (
+                  null
+                )
+              }
+
+            </View>
+          </View>
+
+
+        </Surface>
       )
     });
   }, [data, onLockerButtonPressed]);

@@ -42,6 +42,7 @@ export type Floors = number[];
 export interface LockerWithStatus {
   lockerNumber: number;
   status: LockerStatus;
+  items: string[];
 }
 
 export interface Locker {
