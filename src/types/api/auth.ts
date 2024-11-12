@@ -7,8 +7,10 @@ export interface TokenResponse {
 }
 
 export interface QRKey {
-    key: string;
-    expiredAt: number;
+    qrKey: {
+        expiredAt: number,
+        key: string
+    }
 }
 
 export interface QRKeyPost {

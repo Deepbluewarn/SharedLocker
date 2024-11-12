@@ -38,7 +38,7 @@ export default function Admin(): JSX.Element {
 
                 const value = data.data.value;
                 const currentTime = new Date().getTime();
-                const expiresIn = value.expiredAt - currentTime;
+                const expiresIn = value.qrKey.expiredAt - currentTime;
 
                 return expiresIn;
             }
@@ -102,7 +102,7 @@ export default function Admin(): JSX.Element {
         if (!selLocker) return;
         if (!qrKeyData?.data.value) return;
 
-        return `${qrKeyData?.data.value?.key} ${selLocker}`
+        return `${qrKeyData?.data.value?.qrKey} ${selLocker}`
     }, [qrKeyData, selLocker])
 
     return (

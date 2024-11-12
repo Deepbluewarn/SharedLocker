@@ -197,7 +197,7 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
 
     if (!lockerInfo) return;
 
-    return `${qrKeyData.data.value.key} ${lockerInfo}`;
+    return `${qrKeyData.data.value.qrKey.key} ${lockerInfo}`;
   }, [selectedLocker, qrKeyData]);
 
   /**
