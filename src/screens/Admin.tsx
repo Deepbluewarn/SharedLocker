@@ -102,7 +102,7 @@ export default function Admin(): JSX.Element {
         if (!selLocker) return;
         if (!qrKeyData?.data.value) return;
 
-        return `${qrKeyData?.data.value?.qrKey} ${selLocker}`
+        return `${qrKeyData?.data.value?.qrKey.key} ${selLocker}`
     }, [qrKeyData, selLocker])
 
     return (
