@@ -43,6 +43,7 @@ export interface LockerWithStatus {
   lockerNumber: number;
   status: LockerStatus;
   items: string[];
+  imageUrl: string;
 }
 
 export interface Locker {

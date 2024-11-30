@@ -1,10 +1,10 @@
 import {useCallback, useRef, useState} from 'react';
 import Step from '@/components/Step';
-import {Button, Chip, Divider, Surface, Text} from 'react-native-paper';
+import {Button, Chip, Divider, Modal, Portal, Surface, Text} from 'react-native-paper';
 import {ClaimStackScreenProps} from '@/navigation/types';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import lockerAPI from '@/network/locker/api';
-import {Alert, View} from 'react-native';
+import {Alert, Image, Pressable, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {isAxiosError} from 'axios';
 import { LockerStatusAttrMapper, LockerStatusAttributes } from '@/utils/mapper';
@@ -25,6 +25,10 @@ export default function DetailCategory({
     refetch()
   }
 
+  const [ modalImageUrl, setModalImageUrl ] = useState('');
+  const [visible, setVisible] = useState(false);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
   const claimMutation = useMutation<ILocker>({
     mutationFn: () =>
       lockerAPI().claimLockers(
@@ -152,6 +156,21 @@ export default function DetailCategory({
             borderRadius: 8,
           }}
         >
+          <Portal>
+            <Modal 
+              visible={visible} 
+              onDismiss={hideModal} 
+              contentContainerStyle={{
+              }}
+              theme={{
+                colors: {
+                  backdrop: 'rgba(0, 0, 0, .2)'
+                }
+              }}
+            >
+              <Image source={{ uri: modalImageUrl }} style={{ width: '100%', minHeight: 300, resizeMode: 'contain' }}/>
+            </Modal>
+          </Portal>
           <View style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
             <View style={{
               width: 4,
@@ -159,7 +178,7 @@ export default function DetailCategory({
             }}></View>
 
             <View style={{ display: 'flex', flexDirection: 'column', gap: 16, flex: 1 }}>
-              <View style={{ display: 'flex', flexDirection: 'row', gap: 8, flex: 1 }}>
+              <View style={{ display: 'flex', flexDirection: 'row', gap: 8, flex: 1, alignItems: 'center' }}>
                 <Button
                   key={e.lockerNumber}
                   mode="outlined"
@@ -169,6 +188,21 @@ export default function DetailCategory({
                 >
                   {`${e.lockerNumber}번`}
                 </Button>
+                {
+                  e.imageUrl ? (
+                    <Pressable onPress={() => {showModal(); setModalImageUrl(e.imageUrl)}}>
+                      <Image
+                        source={{ uri: e.imageUrl }}
+                        style={{
+                          borderRadius: 8,
+                          width: 40, height: 40, resizeMode: 'cover'
+                        }}
+                        
+                      />
+                    </Pressable>
+                    
+                  ) : null
+                }
                 <Chip
                   icon='information'
                   mode='outlined'
