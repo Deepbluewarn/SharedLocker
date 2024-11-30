@@ -43,5 +43,11 @@ export default function SubCategory({
     ));
   }, [data, onButtonPressed]);
 
-  return <Step title="층수를 선택하세요">{floorList()}</Step>;
+  return (
+    <Step title="층수를 선택하세요" breadcrumbs={[buildingSelection.buildingName]}>
+      <>
+        {floorList()}
+      </>
+    </Step>
+  );
 }

@@ -1,4 +1,4 @@
-import {useCallback, useRef} from 'react';
+import {useCallback, useRef, useState} from 'react';
 import Step from '@/components/Step';
 import {Button, Chip, Divider, Surface, Text} from 'react-native-paper';
 import {ClaimStackScreenProps} from '@/navigation/types';
@@ -9,6 +9,7 @@ import Toast from 'react-native-toast-message';
 import {isAxiosError} from 'axios';
 import { LockerStatusAttrMapper, LockerStatusAttributes } from '@/utils/mapper';
 import { ILocker, ILockerList, ILockerRequestShare, LockerStatus } from '@/types/api/locker';
+import { StackActions } from '@react-navigation/native';
 
 export default function DetailCategory({
   route,
@@ -16,9 +17,13 @@ export default function DetailCategory({
 }: ClaimStackScreenProps<'Detail'>) {
   const {buildingSelection, floorSelection} = route.params;
   const floorRef = useRef<number>(0);
-  const {data} = useQuery<ILockerList>(['lockers', buildingSelection, floorSelection], () =>
+  const {data, refetch} = useQuery<ILockerList>(['lockers', buildingSelection, floorSelection], () =>
     lockerAPI().lockers(buildingSelection.buildingNumber, floorSelection),
   );
+
+  const refresh = async() => {
+    refetch()
+  }
 
   const claimMutation = useMutation<ILocker>({
     mutationFn: () =>
@@ -40,6 +45,9 @@ export default function DetailCategory({
           type: 'success',
           text2: `${buildingSelection.buildingName} ${floorSelection}층 ${locker.lockerNumber}번 보관함을 신청하였습니다.`,
         });
+
+        // Home 스크린으로 돌아가기 전에 Claim 스택을 초기화.
+        navigation.dispatch(StackActions.popToTop());
         navigation.navigate('Home', {refresh: true});
       }
     },
@@ -192,5 +200,13 @@ export default function DetailCategory({
     });
   }, [data, onLockerButtonPressed]);
 
-  return <Step title="보관함 번호를 선택하세요">{floorList()}</Step>;
+  return (
+    <Step 
+      title="보관함 번호를 선택하세요"
+      breadcrumbs={[buildingSelection.buildingName, `${floorSelection.toString()}층`]}
+      onRefresh={refresh}
+    >
+      {floorList()}
+    </Step>
+  );
 }
