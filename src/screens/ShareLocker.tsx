@@ -104,6 +104,7 @@ export default function ShareLocker(
                       <TextInput
                         placeholder="공유자 아이디를 입력하세요"
                         onChangeText={newText => setSharedWith(newText)}
+                        mode="outlined"
                       />
                       <Button mode="contained-tonal" onPress={() => onButtonPressed()}>
                         등록

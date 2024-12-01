@@ -98,6 +98,7 @@ export default function Register(
                 label={'이름'}
                 placeholder="이름"
                 value={value}
+                mode="outlined"
                 onChangeText={onChange}
               />
             )}
@@ -113,6 +114,7 @@ export default function Register(
                 label={'아이디'}
                 placeholder="아이디"
                 value={value}
+                mode="outlined"
                 onChangeText={onChange}
               />
             )}
@@ -127,6 +129,7 @@ export default function Register(
                 label={'이메일'}
                 placeholder="이메일"
                 value={value}
+                mode="outlined"
                 onChangeText={onChange}
               />
             )}
@@ -142,6 +145,7 @@ export default function Register(
                 placeholder="비밀번호"
                 secureTextEntry={true}
                 value={value}
+                mode="outlined"
                 onChangeText={onChange}
               />
             )}
@@ -157,6 +161,7 @@ export default function Register(
                 placeholder="비밀번호 재입력"
                 secureTextEntry={true}
                 value={value}
+                mode="outlined"
                 onChangeText={onChange}
               />
             )}

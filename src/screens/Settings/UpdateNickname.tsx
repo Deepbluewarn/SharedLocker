@@ -62,6 +62,7 @@ export default function UpdateNickname(props: SettingStackScreenProps<'UpdateNic
                         defaultValue={user.nickname} 
                         value={newNickname} 
                         onChangeText={text => setNewNickname(text)} 
+                        mode="outlined"
                     />
                 </View>
                 <Button 

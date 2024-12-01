@@ -77,6 +77,7 @@ export default function Login(
                 label={'아이디'}
                 placeholder="아이디"
                 value={value}
+                mode="outlined"
                 onChangeText={onChange}
               />
             )}
@@ -92,6 +93,7 @@ export default function Login(
                 placeholder="비밀번호"
                 secureTextEntry={true}
                 value={value}
+                mode="outlined"
                 onChangeText={onChange}
               />
             )}

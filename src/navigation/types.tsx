@@ -23,6 +23,7 @@ export type HomeTabParamList = {
   Home: {refresh?: boolean};
   ClaimLocker: undefined;
   ShareLocker: ILockerWithUserInfo;
+  SearchLocker: undefined;
   Admin: undefined;
 };
 

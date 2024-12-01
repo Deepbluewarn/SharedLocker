@@ -51,7 +51,7 @@ export default function Step(props: {
                 {
                   props.breadcrumbs.map((b, idx) => {
                     return (
-                      <Text variant='titleMedium'>{b}{idx === props.breadcrumbs!.length - 1 ? '' : '/'}</Text>
+                      <Text variant='titleMedium' key={b}>{b}{idx === props.breadcrumbs!.length - 1 ? '' : '/'}</Text>
                     )
                   })
                 }

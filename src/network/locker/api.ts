@@ -1,4 +1,4 @@
-import { ILockerBuildingList, ILockerFloorList, ILocker, ILockerCancel, ILockerList, ILockerRequestShare, ILockerShare } from '@/types/api/locker';
+import { ILockerBuildingList, ILockerFloorList, ILocker, ILockerCancel, ILockerList, ILockerRequestShare, ILockerShare, ILockerSearchByItem } from '@/types/api/locker';
 import {axiosInstance} from '../client';
 
 const lockerAPI = () => ({
@@ -64,6 +64,11 @@ const lockerAPI = () => ({
       isOwner,
       assigneeTo,
     });
+  },
+  searchLockerByItem: (query: string): Promise<ILockerSearchByItem> => {
+    return axiosInstance.get('/api/locker/search/item', {
+      params: { query },
+    })
   }
 });
 

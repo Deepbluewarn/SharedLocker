@@ -40,6 +40,9 @@ export type Building = {
 export type Buildings = Building[];
 export type Floors = number[];
 export interface LockerWithStatus {
+  buildingName: string;
+  buildingNumber: number;
+  floorNumber: number
   lockerNumber: number;
   status: LockerStatus;
   items: string[];
@@ -69,3 +72,5 @@ export interface ILockerShare extends IServerInfoResponse<string> {}
 export interface ILockerRequestShare extends IServerInfoResponse<string> {}
 // DELETE /api/locker/cancel
 export interface ILockerCancel extends IServerInfoResponse<string> {}
+// GET /api/locker/search/item
+export interface ILockerSearchByItem extends IServerInfoResponse<string, LockerWithStatus[]> {}

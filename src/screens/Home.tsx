@@ -8,7 +8,7 @@ import { mutationErrorHandler } from '@/utils/mutationHandler';
 import { useFocusEffect } from '@react-navigation/native';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Alert, ScrollView, View } from 'react-native';
+import { Alert, RefreshControl, ScrollView, View } from 'react-native';
 import { Appbar, Button, Card, Dialog, Divider, Menu, Portal, RadioButton, Text } from 'react-native-paper';
 import { QrCodeSvg } from 'react-native-qr-svg';
 import Toast from 'react-native-toast-message';
@@ -24,6 +24,7 @@ import { ILogout, IQrKey } from '@/types/api/auth';
 import RequestList from '@/components/RequestList';
 import Admin from './Admin';
 import { HomeStyles } from '@/styles/home';
+import SearchLocker from './SearchLocker';
 
 export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
   // 유저가 이용할 수 있는 보관함의 전체 목록입니다. 소유 보관함과 공유 보관함을 모두 포함합니다.
@@ -240,10 +241,18 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
   }, [userLocker, selLocker]);
 
   const [visible, setVisible] = React.useState(false);
-
   const openMenu = () => setVisible(true);
-
   const closeMenu = () => setVisible(false);
+
+  const [refreshing, setRefreshing] = useState(false);
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
 
   useEffect(() => {
     const unsubscribeBlur = props.navigation.addListener('blur', () => {
@@ -271,7 +280,11 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
         </Menu>
       </Appbar.Header>
 
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
         <View style={{
           margin: 16,
           gap: 16,
@@ -413,6 +426,10 @@ export function HomeNavigator(): JSX.Element {
       <Tab.Screen name="ShareLocker" component={ShareLocker} options={{
         tabBarLabel: '공유',
         tabBarIcon: 'share-variant',
+      }}/>
+      <Tab.Screen name="SearchLocker" component={SearchLocker} options={{
+        tabBarLabel: '검색',
+        tabBarIcon: 'feature-search-outline',
       }}/>
       {
         admin && admin.role === 'worker' && (
