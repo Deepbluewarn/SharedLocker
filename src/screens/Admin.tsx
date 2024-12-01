@@ -5,7 +5,7 @@ import { IQrKey } from "@/types/api/auth";
 import { ISimpleLockerInfo, Locker } from "@/types/api/locker";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { RefreshControl, ScrollView, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { Card, Text } from "react-native-paper";
 import { QrCodeSvg } from "react-native-qr-svg";
@@ -28,7 +28,7 @@ export default function Admin(): JSX.Element {
     // 선택한 보관함
     const [selLocker, setSelLocker] = useState<ISimpleLockerInfo>();
 
-    const { data: qrKeyData } = useQuery<IQrKey>(
+    const { data: qrKeyData, refetch: refetchQrKey } = useQuery<IQrKey>(
         ['qrKey'],
         () => authAPI().qrKey(),
         {
@@ -105,8 +105,21 @@ export default function Admin(): JSX.Element {
         return `${qrKeyData?.data.value?.qrKey.key} ${selLocker}`
     }, [qrKeyData, selLocker])
 
+    const [refreshing, setRefreshing] = useState(false);
+    const handleRefresh = useCallback(async () => {
+        setRefreshing(true);
+        try {
+            refetchQrKey()
+        } finally {
+            setRefreshing(false);
+        }
+    }, []);
     return (
-        <ScrollView>
+        <ScrollView
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+            }
+        >
             <View
                 style={{
                     margin: 16,

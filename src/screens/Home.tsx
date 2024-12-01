@@ -42,7 +42,6 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
   const {
     status: authStatus,
     data: authData,
-    refetch: authRefetch,
   } = useQuery<ILogout>(['auth'], () => authAPI().signOut(), {
     enabled: false,
     retry: false,
@@ -62,7 +61,7 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
   )
 
   // QR Key 요청
-  const { data: qrKeyData } = useQuery<IQrKey>(
+  const { data: qrKeyData, refetch: refetchQrKey } = useQuery<IQrKey>(
     ['qrKey'],
     () => authAPI().qrKey(),
     {
@@ -248,7 +247,10 @@ export default function Home(props: HomeTabScreenProps<'Home'>): JSX.Element {
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-
+      refetchQrKey()
+      userLockerRefetch()
+      sharedLockerRefetch()
+      
     } finally {
       setRefreshing(false);
     }
