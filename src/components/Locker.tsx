@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useCallback, useRef, useState } from 'react';
 import { Alert, Image, Pressable, View } from 'react-native';
-import { Button, Chip, Divider, Modal, Portal, Surface } from 'react-native-paper';
+import { Button, Chip, Divider, Modal, Portal, Surface, Text } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 
 export default function Locker(props: { lockerInfo: LockerWithStatus, dismiss: () => void }) {
@@ -151,6 +151,9 @@ export default function Locker(props: { lockerInfo: LockerWithStatus, dismiss: (
         }}></View>
 
         <View style={{ display: 'flex', flexDirection: 'column', gap: 16, flex: 1 }}>
+          <View>
+            <Text variant='titleSmall'>{`${props.lockerInfo.buildingName} ${props.lockerInfo.floorNumber}층`}</Text>
+          </View>
           <View style={{ display: 'flex', flexDirection: 'row', gap: 8, flex: 1, alignItems: 'center' }}>
             <Button
               key={props.lockerInfo.lockerNumber}
