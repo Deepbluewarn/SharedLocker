@@ -8,9 +8,10 @@ import { Alert, Image, Pressable, View } from 'react-native';
 import { Button, Chip, Divider, Modal, Portal, Surface, Text } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 
-export default function Locker(props: { lockerInfo: LockerWithStatus, dismiss: () => void }) {
+export default function Locker(props: { lockerInfo: LockerWithStatus, dismiss?: () => void }) {
   const [modalImageUrl, setModalImageUrl] = useState('');
   const [visible, setVisible] = useState(false);
+  const [imageUrlState, ] = useState(Date.now);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const floorRef = useRef<number>(0);
@@ -35,7 +36,9 @@ export default function Locker(props: { lockerInfo: LockerWithStatus, dismiss: (
           text2: `${props.lockerInfo.buildingName} ${props.lockerInfo.floorNumber}층 ${locker.lockerNumber}번 보관함을 신청하였습니다.`,
         });
 
-        props.dismiss();
+        if (props.dismiss) {
+          props.dismiss();
+        }
       }
     },
     onError(error) {
@@ -63,7 +66,9 @@ export default function Locker(props: { lockerInfo: LockerWithStatus, dismiss: (
           type: 'success',
           text2: _data?.message,
         });
-        props.dismiss();
+        if (props.dismiss) {
+          props.dismiss();
+        }
       }
     },
     onError(error) {
@@ -168,7 +173,7 @@ export default function Locker(props: { lockerInfo: LockerWithStatus, dismiss: (
               props.lockerInfo.imageUrl ? (
                 <Pressable onPress={() => { showModal(); setModalImageUrl(props.lockerInfo.imageUrl) }}>
                   <Image
-                    source={{ uri: props.lockerInfo.imageUrl }}
+                    source={{ uri: `${props.lockerInfo.imageUrl}?${imageUrlState}` }}
                     style={{
                       borderRadius: 8,
                       width: 40, height: 40, resizeMode: 'cover'

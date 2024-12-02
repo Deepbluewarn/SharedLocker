@@ -3,14 +3,16 @@ import { HomeTabScreenProps } from "@/navigation/types";
 import lockerAPI from "@/network/locker/api";
 import { ILockerSearchByItem } from "@/types/api/locker";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { useCallback, useState } from "react";
+import { RefreshControl, ScrollView, View } from "react-native";
 import { Button, Divider, Text, TextInput } from "react-native-paper";
 
 export default function SearchLocker(
     props: HomeTabScreenProps<'SearchLocker'>,
 ): JSX.Element {
     const [ query, setQuery ] = useState('');
+    const [lockerKey, setLockerKey] = useState(Date.now)
+    const [refreshing, setRefreshing] = useState(false);
     const { data, refetch } = useQuery<ILockerSearchByItem>(
         ['lockersByItem', query], 
         () => lockerAPI().searchLockerByItem(query),
@@ -18,6 +20,16 @@ export default function SearchLocker(
             enabled: false,
         }
     );
+    const handleRefresh = async () => {
+        setRefreshing(true);
+        try {
+            refetch()
+            setLockerKey(Date.now);
+        } finally {
+            setRefreshing(false);
+        }
+    };
+    
     const value = data?.data.value;
 
     const searchBtnPressed = () => {
@@ -30,6 +42,9 @@ export default function SearchLocker(
 
     return (
         <ScrollView
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+            }
             style={{
                 padding: 16,
             }}>
@@ -66,7 +81,7 @@ export default function SearchLocker(
                 <Divider />
 
                 {
-                    value?.map(locker => <Locker key={locker.lockerNumber} lockerInfo={locker} dismiss={() => {}}/>)
+                    value?.map(locker => <Locker key={`${locker.buildingNumber}-${locker.floorNumber}-${locker.lockerNumber}-${lockerKey}`} lockerInfo={locker} dismiss={() => {}}/>)
                 }
 
             </View>

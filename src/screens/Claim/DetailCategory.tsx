@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useState } from 'react';
 import Step from '@/components/Step';
 import {ClaimStackScreenProps} from '@/navigation/types';
 import {useQuery} from '@tanstack/react-query';
@@ -15,9 +15,11 @@ export default function DetailCategory({
   const {data, refetch} = useQuery<ILockerList>(['lockers', buildingSelection, floorSelection], () =>
     lockerAPI().lockers(buildingSelection.buildingNumber, floorSelection),
   );
+  const [lockerKey, setLockerKey] = useState(Date.now)
 
   const refresh = async() => {
     refetch()
+    setLockerKey(Date.now);
   }
 
   const onDismiss = () => {
@@ -32,7 +34,13 @@ export default function DetailCategory({
       onRefresh={refresh}
     >
       {
-        data?.data.value?.map(locker => <Locker key={locker.lockerNumber} lockerInfo={locker} dismiss={onDismiss}/>)
+        data?.data.value?.map(
+          locker => <Locker 
+            key={`${locker.buildingNumber}-${locker.floorNumber}-${locker.lockerNumber}-${lockerKey}`} 
+            lockerInfo={locker} 
+            dismiss={onDismiss}
+          />
+        )
       }
     </Step>
   );
