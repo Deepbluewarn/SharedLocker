@@ -3,7 +3,7 @@ import { ILocker, ILockerRequestShare, LockerStatus, LockerWithStatus } from '@/
 import { LockerStatusAttributes, LockerStatusAttrMapper } from '@/utils/mapper';
 import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
-import { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Alert, Image, Pressable, View } from 'react-native';
 import { Button, Chip, Divider, Modal, Portal, Surface, Text } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
@@ -146,7 +146,7 @@ export default function Locker(props: { lockerInfo: LockerWithStatus, dismiss?: 
             }
           }}
         >
-          <Image source={{ uri: modalImageUrl }} style={{ width: '100%', minHeight: 300, resizeMode: 'contain' }} />
+          <Image source={{ uri: `${modalImageUrl}?${imageUrlState}` }} style={{ width: '100%', minHeight: 300, resizeMode: 'contain' }} />
         </Modal>
       </Portal>
       <View style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
